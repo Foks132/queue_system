@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"lib": ["esnext"],
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"noFallthroughCasesInSwitch": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": false,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"baseUrl": "./src",
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+	},
+	"include": ["./src", "./prisma"]
+}

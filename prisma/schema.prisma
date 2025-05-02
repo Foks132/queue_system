@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  login    String
+  password String
+
+  userPermission userPermission[]
+  window         window[]         @relation("userWindow")
+}
+
+model userPermission {
+  userId     Int
+  user       user       @relation(fields: [userId], references: [id])
+  appealType appealType
+
+  @@id([userId, appealType])
+  @@index([userId, appealType])
+}
+
+model appeal {
+  id     Int          @id @default(autoincrement())
+  code   String
+  type   appealType   @default(other)
+  status appealStatus
+
+  window window[] @relation("appealWindow")
+  @@index([id, type])
+}
+
+model window {
+  id     Int        @id @default(autoincrement())
+  window String
+  type   appealType
+
+  user   user[]   @relation("userWindow")
+  appeal appeal[] @relation("appealWindow")
+
+  @@unique([window, type])
+  @@index([id, window, type])
+}
+
+enum appealStatus {
+  open
+  process
+  closed
+}
+
+enum appealType {
+  other // Другое
+  work // Трудоустройство, безработица
+  benefits // Пособия
+  pension // Пенсии
+  payments // Социальные выплаты
+  homeCare // Уход на дому
+  elderlySupport // Поддержка пожилых
+  disabilityAid // Помощь инвалидам
+  housing // Жилищные вопросы
+  childSupport // Поддержка семей с детьми
+  legalHelp // Юридическая помощь
+  consultation // Консультации
+  transportBenefit // Транспортные льготы
+  documents // Получение справок и документов
+  crisisSupport // Экстренная помощь
+  daycare // Устройство в детские учреждения
+  socialCard // Социальная карта
+  utilityDiscount // Коммунальные льготы
+}

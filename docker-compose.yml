@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16.8
+    container_name: postgres
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_DB=$DB_BASE
+      - PGDATA=/var/lib/postgres/data/pgdata/data/pgdata
+    ports:
+      - 127.0.0.1:$DB_PORT:$DB_PORT
+    volumes:
+      - db_postgres:/var/lib/postgres
+    networks:
+      - network-queue
+  node:
+    container_name: node
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file:
+      - .env.docker
+    environment:
+      - DB_URL=$DB_URL
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./prisma:/usr/src/app/prisma
+      - ./package.json:/usr/src/app/package.json
+    expose:
+      - $NODE_PORT
+    ports:
+      - $NODE_PORT:$NODE_PORT
+    networks:
+      - network-queue
+    command: sh -c "npx prisma migrate deploy && npm run start"
+
+volumes:
+  db_postgres:
+
+networks:
+  network-queue:
+    driver: bridge
