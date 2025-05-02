@@ -14,4 +14,11 @@ export const joinWindowValidation = (data) => {
       windowId: Joi.number().required().label("windowId"),
     });
     return schema.validate(data);
+};
+
+export const createAppealValidation = (data) => {
+    const schema = Joi.object({
+      type: Joi.string().required().label("type"),
+    });
+    return schema.validate(data);
   };

@@ -42,5 +42,5 @@ export const WindowService = {
             },
         });
         return user;
-    }
+    },
 }

@@ -25,7 +25,7 @@ export const AuthService = {
                     select: {
                         window: true,
                     }
-                }
+                },
             }
         });
         return user;
