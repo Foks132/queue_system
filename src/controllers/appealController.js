@@ -38,6 +38,46 @@ const AppealController = {
             console.log(e);
             return res.status(400).json({ message: e.message });
         }
+    },
+
+    accept: async (req, res) => {
+        try {
+            const { userId, appealId } = req.body;
+            let result = await AppealService.accept(userId, appealId);
+            if (!result) return res.sendStatus(404);
+            console.log(result);
+            result = {
+                code: result.code,
+                type: result.type,
+                status: result.status,
+                windowId: result.window[0].id,
+                userId: result.window[0].user[0].id,
+            }
+            return res.status(200).json(result);
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: e.message });
+        }
+    },
+
+    close: async (req, res) => {
+        try {
+            const { userId, appealId } = req.body;
+            let result = await AppealService.close(userId, appealId);
+            if (!result) return res.sendStatus(404);
+            console.log(result);
+            result = {
+                code: result.code,
+                type: result.type,
+                status: result.status,
+                windowId: result.window[0].id,
+                userId: result.window[0].user[0].id,
+            }
+            return res.status(200).json(result);
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: e.message });
+        }
     }
 }
 

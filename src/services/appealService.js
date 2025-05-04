@@ -34,12 +34,79 @@ export const AppealService = {
         const prefix = APPEAL_TYPE_PREFIX[type] || 'Я';
         const code = `${prefix}${newCode}`;
 
-        console.log(code);
         const appealCreate = {
             code: code,
             type: type,
         }
         const appeal = await dbPrisma.appeal.create({ data: appealCreate });
         return appeal;
+    },
+
+    accept: async (userId, appealId) => {
+        const appeal = await changeStatusAppeal(userId, appealId, 'open', 'process');
+
+        return appeal;
+    },
+
+    close: async (userId, appealId) => {
+        const appeal = await changeStatusAppeal(userId, appealId, 'process', 'closed');
+
+        return appeal;
     }
+}
+
+const changeStatusAppeal = async (userId, appealId, statusOld, statusNew) => {
+    let appeal = await dbPrisma.appeal.findFirst({
+        where: {
+            id: Number(appealId),
+            status: statusOld,
+        },
+    });
+    if (!appeal) throw new Error("Appeal not found or already closed");
+    
+    const userPermissions = await dbPrisma.userPermission.findMany({
+        where: { 
+            userId: Number(userId), 
+        },
+    });
+
+    const hasPermission = userPermissions.some(permission => permission.appealType === appeal.type);
+    if (!hasPermission) throw new Error("User does not have permission to accept this appeal");
+
+    const window = await dbPrisma.window.findFirst({
+        where: {
+            user: {
+                some: {
+                    id: Number(userId),
+                },
+            },
+        },
+    });
+    if (!window) throw new Error("The user does not join the window");
+
+    appeal = await dbPrisma.appeal.update({
+        where: { id: appeal.id },
+        data: { 
+            status: statusNew,
+            window: {
+                connect: {
+                    id: window.id,
+                },
+            }
+         },
+        include: {
+            window: {
+                select: {
+                    user: {
+                        select: {
+                            id:  true,
+                        }
+                    },
+                    id: true,
+                }
+            }
+        },
+    }); 
+
+    return appeal;
 }

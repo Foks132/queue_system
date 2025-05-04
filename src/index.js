@@ -5,6 +5,7 @@ import express from "express";
 import webRoutes from "./web/index.js";
 import { createServer } from "node:http";
 import { apiRouter } from "./routes/index.js";
+import { startWebSocketServer } from "./utils/ws.js";
 
 const config = dotenv.config();
 dotenvExpand.expand(config);
@@ -18,6 +19,8 @@ app.use(express.json());
 
 app.use("/api", apiRouter);
 app.use("/", webRoutes);
+
+startWebSocketServer(server);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
