@@ -7,35 +7,35 @@ export function startWebSocketServer(server) {
     wss.on('connection', function connection(ws) {
         ws.on('message', async function incoming(message) {
             try {
-                const { action, data } = JSON.parse(message);
+                const { type, data } = JSON.parse(message);
 
-                if (action === 'all') {
+                if (type === 'all') {
                     const result = await AppealService.all(data.status, data.types);
-                    ws.send(JSON.stringify({ action: 'all', data: result }));
+                    ws.send(JSON.stringify({ type: 'all', data: result }));
                 }
 
-                if (action === 'create') {
+                if (type === 'create') {
                     const result = await AppealService.create(data);
-                    ws.send(JSON.stringify({ action: 'create', data: result }));
-                    broadcast(wss, { action: 'newAppeal', data: result });
+                    ws.send(JSON.stringify({ type: 'create', data: result }));
+                    broadcast(wss, { type: 'newAppeal', data: result });
                 }
 
-                if (action === 'accept') {
+                if (type === 'accept') {
                     const { userId, appealId } = data;
                     const result = await AppealService.accept(userId, appealId);
-                    ws.send(JSON.stringify({ action: 'accept', data: result }));
-                    broadcast(wss, { action: 'appealAccepted', data: result });
+                    ws.send(JSON.stringify({ type: 'accept', data: result }));
+                    broadcast(wss, { type: 'appealAccepted', data: result });
                 }
 
-                if (action === 'close') {
+                if (type === 'close') {
                     const { userId, appealId } = data;
                     const result = await AppealService.close(userId, appealId);
-                    ws.send(JSON.stringify({ action: 'close', data: result }));
-                    broadcast(wss, { action: 'appealClosed', data: result });
+                    ws.send(JSON.stringify({ type: 'close', data: result }));
+                    broadcast(wss, { type: 'appealClosed', data: result });
                 }
             } catch (e) {
                 console.error(e);
-                ws.send(JSON.stringify({ action: 'error', message: e.message }));
+                ws.send(JSON.stringify({ type: 'error', message: e.message }));
             }
         });
     });
