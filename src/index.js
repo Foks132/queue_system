@@ -6,6 +6,7 @@ import webRoutes from "./web/index.js";
 import { createServer } from "node:http";
 import { apiRouter } from "./routes/index.js";
 import { startWebSocketServer } from "./utils/ws.js";
+import cors from 'cors';
 
 const config = dotenv.config();
 dotenvExpand.expand(config);
@@ -13,10 +14,10 @@ dotenvExpand.expand(config);
 const { NODE_HOST, NODE_PORT, APP_PROT } = process.env;
 
 var app = express();
+app.options('*', cors())
 const server = createServer(app);
 
 app.use(express.json());
-
 app.use("/api", apiRouter);
 app.use("/", webRoutes);
 
