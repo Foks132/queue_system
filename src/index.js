@@ -14,7 +14,7 @@ dotenvExpand.expand(config);
 const { NODE_HOST, NODE_PORT, APP_PROT } = process.env;
 
 var app = express();
-app.options('*', cors())
+app.use(cors({ origin: '*' }));
 const server = createServer(app);
 
 app.use(express.json());
