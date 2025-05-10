@@ -52,7 +52,7 @@ export const WindowService = {
             },
             data: {
                 window: {
-                    delete: {
+                    disconnect: {
                         id: Number(windowId),
                     }
                 }
