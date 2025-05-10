@@ -14,7 +14,7 @@ const WindowController = {
                 id: result.id,
                 login: result.login,
                 userPermission: Object.values(result.userPermission.map((permission) => (permission.appealType))),
-                window: Object.values(result.window.map((window) => (window.window))),
+                window: Object.values(result.window.map((window) => (window))),
             }
             return res.status(200).json(result);
         } catch (e) {
