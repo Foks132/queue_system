@@ -9,6 +9,11 @@ export function startWebSocketServer(server) {
             try {
                 const { type, data } = JSON.parse(message);
 
+                if (type === 'init') {
+                    ws.clientTypes = data.types || [];
+                    return;
+                }
+
                 if (type === 'all') {
                     const result = await AppealService.all(data.status, data.types);
                     ws.send(JSON.stringify({ type: 'all', data: result }));
@@ -49,7 +54,11 @@ const broadcast = (wss, payload) => {
         row: payload.data
     }});
     wss.clients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
+        if (
+            client.readyState === WebSocket.OPEN &&
+            Array.isArray(client.clientTypes) &&
+            client.clientTypes.includes(payload.data.type)
+        ) {
             client.send(data);
         }
     });
