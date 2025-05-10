@@ -14,7 +14,10 @@ const AuthController = {
                 id: result.id,
                 login: result.login,
                 userPermission: Object.values(result.userPermission.map((permission) => (permission.appealType))),
-                window: result.window
+                window: Object.values(result.window.map((window) => ({
+                    id: window.id,
+                    name: window.window,
+                })))
             }
             return res.status(200).json(result);
         } catch (e) {
