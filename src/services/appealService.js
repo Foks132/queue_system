@@ -12,6 +12,9 @@ export const AppealService = {
                     type: types.length > 0 ? {
                         in: types,
                     } : undefined,
+                },
+                select: {
+                    window: true,
                 }
             });
         }
@@ -19,6 +22,9 @@ export const AppealService = {
             appeal = await dbPrisma.appeal.findMany({
                 where: {
                     status: status ?? undefined
+                },
+                select: {
+                    window: true,
                 }
             });
         }

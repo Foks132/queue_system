@@ -12,6 +12,7 @@ const AppealController = {
                 code: appeal.code,
                 type: appeal.type,
                 status: appeal.status,
+                window: appeal.window,
             }))
             return res.status(200).json(result);
         } catch (e) {
