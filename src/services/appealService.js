@@ -1,5 +1,6 @@
 import { dbPrisma } from "../utils/database.js"
 import { APPEAL_TYPE_PREFIX } from "../utils/constants.js";
+import { appealStatus } from '@prisma/client';
 
 export const AppealService = {
     all: async (status = undefined, types = undefined) => {
@@ -52,19 +53,21 @@ export const AppealService = {
     },
 
     accept: async (userId, appealId) => {
-        const appeal = await changeStatusAppeal(userId, appealId, 'open', 'process');
+        const appeal = await changeStatusAppeal(userId, appealId, appealStatus.open, appealStatus.process);
 
         return appeal;
     },
 
     close: async (userId, appealId) => {
-        const appeal = await changeStatusAppeal(userId, appealId, 'process', 'close');
+        const appeal = await changeStatusAppeal(userId, appealId, appealStatus.process, appealStatus.close);
+        console.log("close!!!")
 
         return appeal;
     }
 }
 
 const changeStatusAppeal = async (userId, appealId, statusOld, statusNew) => {
+    console.log(statusNew)
     let appeal = await dbPrisma.appeal.findFirst({
         where: {
             id: Number(appealId),
