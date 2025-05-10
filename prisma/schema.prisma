@@ -32,18 +32,19 @@ model appeal {
   status appealStatus @default(open)
 
   window window[] @relation("appealWindow")
+
   @@index([id, type])
 }
 
 model window {
-  id     Int        @id @default(autoincrement())
-  window String
+  id   Int    @id @default(autoincrement())
+  name String
 
   user   user[]   @relation("userWindow")
   appeal appeal[] @relation("appealWindow")
 
-  @@unique([window])
-  @@index([id, window])
+  @@unique([name])
+  @@index([id, name])
 }
 
 enum appealStatus {

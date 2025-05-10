@@ -28,12 +28,6 @@ const AppealController = {
             const data = req.body;
             let result = await AppealService.create(data);
             if (!result) return res.sendStatus(404);
-
-            // result = result.map((appeal) => ({
-            //     code: appeal.code,
-            //     type: appeal.type,
-            //     status: appeal.status,
-            // }))
             return res.status(200).json(result);
         } catch (e) {
             console.log(e);
