@@ -5,7 +5,7 @@ export const WindowService = {
         const windows = await dbPrisma.window.findMany();
         return windows;
     },
-    
+
     join: async (userId, windowId) => {
         const window = await dbPrisma.window.findUnique({ 
             where: { 
@@ -68,5 +68,6 @@ export const WindowService = {
                 window: true,
             },
         });
+        return user;
     }
 }
