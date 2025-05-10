@@ -34,11 +34,7 @@ export const WindowService = {
                         appealType: true,
                     }
                 },
-                window: {
-                    select: {
-                        window: true,
-                    }
-                }
+                window: true
             },
         });
         return user;
@@ -64,11 +60,7 @@ export const WindowService = {
                         appealType: true,
                     }
                 },
-                window: {
-                    select: {
-                        window: true,
-                    }
-                }
+                window: true,
             },
         });
     }

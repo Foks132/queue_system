@@ -21,11 +21,7 @@ export const AuthService = {
                         appealType: true,
                     }
                 },
-                window: {
-                    select: {
-                        window: true,
-                    }
-                },
+                window: true,
             }
         });
         return user;
