@@ -43,4 +43,33 @@ export const WindowService = {
         });
         return user;
     },
+
+    quit: async (userId, windowId) => {
+        const user = await dbPrisma.user.update({
+            where: { 
+                id: Number(userId),
+            },
+            data: {
+                window: {
+                    delete: {
+                        id: Number(windowId),
+                    }
+                }
+            },
+            select: {
+                id: true,
+                login: true,
+                userPermission: {
+                    select: {
+                        appealType: true,
+                    }
+                },
+                window: {
+                    select: {
+                        window: true,
+                    }
+                }
+            },
+        });
+    }
 }
