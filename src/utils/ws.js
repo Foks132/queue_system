@@ -53,7 +53,7 @@ const broadcast = (wss, payload) => {
         if (
             client.readyState === WebSocket.OPEN &&
             Array.isArray(client.clientTypes) &&
-            client.clientTypes.includes(payload.data.type)
+           ( client.clientTypes.includes(payload.data.type) || !client.clientTypes.length)
         ) {
             client.send(data);
         }
