@@ -4,7 +4,7 @@ import { APPEAL_TYPE_PREFIX } from "../utils/constants.js";
 export const AppealService = {
     all: async (status = undefined, types = undefined) => {
         let appeal;
-        if (types.length > 0) {
+        if (types && types.length > 0) {
             appeal = await dbPrisma.appeal.findMany({
                 where: {
                     status: status ?? undefined,
