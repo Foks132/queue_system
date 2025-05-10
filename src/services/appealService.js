@@ -58,7 +58,7 @@ export const AppealService = {
     },
 
     close: async (userId, appealId) => {
-        const appeal = await changeStatusAppeal(userId, appealId, 'process', 'closed');
+        const appeal = await changeStatusAppeal(userId, appealId, 'process', 'close');
 
         return appeal;
     }
@@ -71,7 +71,7 @@ const changeStatusAppeal = async (userId, appealId, statusOld, statusNew) => {
             status: statusOld,
         },
     });
-    if (!appeal) throw new Error("Appeal not found or already closed");
+    if (!appeal) throw new Error("Appeal not found or already close");
     
     const userPermissions = await dbPrisma.userPermission.findMany({
         where: { 

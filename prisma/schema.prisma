@@ -49,7 +49,7 @@ model window {
 enum appealStatus {
   open
   process
-  closed
+  close
 }
 
 enum appealType {
