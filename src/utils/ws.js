@@ -9,12 +9,8 @@ export function startWebSocketServer(server) {
             try {
                 const { type, data } = JSON.parse(message);
 
-                if (type === 'init') {
-                    ws.clientTypes = data.types || [];
-                    return;
-                }
-
                 if (type === 'all') {
+                    ws.clientTypes = data.types || [];
                     const result = await AppealService.all(data.status, data.types);
                     ws.send(JSON.stringify({ type: 'all', data: result }));
                 }
