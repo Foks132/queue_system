@@ -113,16 +113,7 @@ const changeStatusAppeal = async (userId, appealId, statusOld, statusNew) => {
             }
          },
         include: {
-            window: {
-                select: {
-                    user: {
-                        select: {
-                            id:  true,
-                        }
-                    },
-                    id: true,
-                }
-            }
+            window: true,
         },
     }); 
 
