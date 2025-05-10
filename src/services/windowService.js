@@ -1,6 +1,11 @@
 import { dbPrisma } from "../utils/database.js"
 
 export const WindowService = {
+    all: async () => {
+        const windows = await dbPrisma.window.findMany();
+        return windows;
+    },
+    
     join: async (userId, windowId) => {
         const window = await dbPrisma.window.findUnique({ 
             where: { 

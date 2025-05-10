@@ -2,6 +2,17 @@ import { WindowService } from "../services/windowService.js";
 import { joinWindowValidation } from "../utils/validation.js";
 
 const WindowController = {
+    all: async (req, res) => {
+        try {
+            let result = await WindowService.all();
+            
+            return res.status(200).json(result);
+        } catch (e) {
+            console.log(e);
+            return res.status(400).json({ message: e.message });
+        }
+    },
+
     join: async (req, res) => {
         try {
             const { error } = joinWindowValidation(req.body);
