@@ -17,21 +17,21 @@ export function startWebSocketServer(server) {
                 if (type === 'create') {
                     const result = await AppealService.create(data);
                     ws.send(JSON.stringify({ type: 'create', data: result }));
-                    broadcast(wss, { type: 'newAppeal', data: result });
+                    broadcast(wss, { type: 'add', data: result });
                 }
 
                 if (type === 'accept') {
                     const { userId, appealId } = data;
                     const result = await AppealService.accept(userId, appealId);
                     ws.send(JSON.stringify({ type: 'accept', data: result }));
-                    broadcast(wss, { type: 'appealAccepted', data: result });
+                    broadcast(wss, { type: 'update', data: result });
                 }
 
                 if (type === 'close') {
                     const { userId, appealId } = data;
                     const result = await AppealService.close(userId, appealId);
                     ws.send(JSON.stringify({ type: 'close', data: result }));
-                    broadcast(wss, { type: 'appealClosed', data: result });
+                    broadcast(wss, { type: 'delete', data: result });
                 }
             } catch (e) {
                 console.error(e);
@@ -43,8 +43,11 @@ export function startWebSocketServer(server) {
     console.log('WebSocket server started');
 }
 
-const broadcast = (wss, message) => {
-    const data = JSON.stringify(message);
+const broadcast = (wss, payload) => {
+    const data = JSON.stringify({type: 'updateList', data: {
+        type: payload.type,
+        row: payload.data
+    }});
     wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(data);
