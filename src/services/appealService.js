@@ -13,7 +13,7 @@ export const AppealService = {
                         in: types,
                     } : undefined,
                 },
-                select: {
+                include: {
                     window: true,
                 }
             });
@@ -23,7 +23,7 @@ export const AppealService = {
                 where: {
                     status: status ?? undefined
                 },
-                select: {
+                include: {
                     window: true,
                 }
             });
